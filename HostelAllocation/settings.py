@@ -203,8 +203,4 @@ JAZZMIN_UI_TWEAKS = {
     },
     "actions_sticky_top": True
 }
-   ALLOWED_HOSTS = [
-    'miniproject.pythonanywhere.com',
-    '127.0.0.1',
-    'localhost',
-]
+
