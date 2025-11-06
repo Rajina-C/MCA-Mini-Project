@@ -1,0 +1,82 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - Hostel Allocator</title>
+    
+    <link href="https://bootswatch.com/5/minty/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background-image: url("{% static 'images/campus-bg.png' %}");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            width: 100vw;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-card {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 450px; /* A bit wider for forms */
+        }
+        
+        .auth-card h1 {
+            font-weight: bold;
+            color: var(--bs-primary); /* Uses Minty theme color */
+            margin-bottom: 2rem;
+        }
+        
+        .form-label {
+            text-align: left;
+            display: block;
+            width: 100%;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-card">
+        
+        <h1>Login</h1>
+        
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                Your username and password didn't match. Please try again.
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="id_username" class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" required id="id_username">
+            </div>
+            
+            <div class="mb-3">
+                <label for="id_password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" required id="id_password">
+            </div>
+            
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary">Back to Welcome</a>
+            </div>
+        </form>
+        
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hostel Allotment Slip</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm; /* Standard margins */
+        }
+        body {
+            font-family: "Times New Roman", Times, serif; /* Formal font */
+            font-size: 12pt;
+            line-height: 1.8; /* Slightly increased line spacing */
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 16pt;
+            font-weight: bold;
+        }
+        .title {
+            text-align: center;
+            font-size: 14pt;
+            font-weight: bold;
+            margin-bottom: 40px; /* More space after title */
+            text-decoration: underline;
+        }
+        .details-table {
+            width: 100%;
+            margin-bottom: 30px;
+            /* Remove table structure if preferred, use divs instead */
+        }
+        .details-table td {
+            padding: 10px 0; /* Increased vertical padding */
+        }
+        .details-table td.label {
+            font-weight: bold;
+            width: 150px;
+            padding-right: 15px; /* More space after label */
+            vertical-align: top; /* Align label top */
+        }
+        .footer {
+            margin-top: 50px; /* More space before footer */
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+            font-size: 10pt;
+            color: #555;
+            text-align: center;
+        }
+        .issued-date {
+            margin-top: 40px; /* More space before date */
+            text-align: right;
+            font-size: 11pt;
+        }
+        hr.separator { /* Style for a separator line */
+            border: 0;
+            height: 1px;
+            background-color: #eee;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Pondicherry University</h1>
+    </div>
+
+    <div class="title">
+        Hostel Allotment Slip
+    </div>
+
+    {% if application and application.student and application.assigned_room and application.assigned_room.hostel %}
+        <table class="details-table">
+            {# Student Details #}
+            <tr>
+                <td class="label">Name:</td>
+                <td>{{ application.student.get_full_name|default:application.student.username }}</td>
+            </tr>
+            <tr>
+                <td class="label">Gender:</td>
+                <td>{{ application.get_gender_display }}</td>
+            </tr>
+            <tr>
+                <td class="label">Course Level:</td>
+                <td>{{ application.get_level_display }}</td>
+            </tr>
+
+            {# Separator - Optional #}
+            <tr><td colspan="2"><hr class="separator"></td></tr>
+
+            {# Allotment Details #}
+            <tr>
+                <td class="label">Hostel:</td>
+                <td>{{ application.assigned_room.hostel.name }} ({{ application.assigned_room.hostel.get_gender_display }} / {{ application.assigned_room.hostel.get_level_display }})</td>
+            </tr>
+            <tr>
+                <td class="label">Room No:</td>
+                <td>{{ application.assigned_room.room_number }}</td>
+            </tr>
+
+            {# --- ADD WARDEN DETAILS --- #}
+            {% if application.assigned_room.hostel.warden_name or application.assigned_room.hostel.warden_phone %}
+                <tr><td colspan="2"><hr class="separator"></td></tr> {# Separator #}
+                <tr>
+                    <td class="label">Warden Name:</td>
+                    <td>{{ application.assigned_room.hostel.warden_name|default:"N/A" }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Warden Contact:</td>
+                    <td>{{ application.assigned_room.hostel.warden_phone|default:"N/A" }}</td>
+                </tr>
+            {% endif %}
+            {# --- END WARDEN DETAILS --- #}
+
+        </table>
+
+        <div class="issued-date">
+            <strong>Date Issued:</strong> {% now "F j, Y" %} {# Date format #}
+        </div>
+
+    {% else %}
+        <p><i>Error: Required allotment details are missing. Cannot generate slip.</i></p>
+    {% endif %}
+
+    <div class="footer">
+        Please keep this slip for your records. Contact the hostel warden for check-in procedures.
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,108 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register - Hostel Allocator</title>
+    
+    <link href="https://bootswatch.com/5/minty/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background-image: url("{% static 'images/campus-bg.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            width: 100vw;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+        .auth-card {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        .auth-card h1 {
+            font-weight: bold;
+            color: var(--bs-primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .text-danger {
+            font-size: 0.875em;
+            color: var(--bs-danger);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-card">
+        
+        <h1>Create Your Account</h1>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <h5 class="text-muted mb-3">Account Details</h5>
+            <div class="mb-3">
+                <label for="id_username" class="form-label">Username</label>
+                {{ form.username }}
+                <div class="text-danger">{{ form.username.errors }}</div>
+            </div>
+            <div class="mb-3">
+                <label for="id_email" class="form-label">Email</label>
+                {{ form.email }}
+                <div class="text-danger">{{ form.email.errors }}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="id_password" class="form-label">Password</label>
+                    {{ form.password }}
+                    <div class="text-danger">{{ form.password.errors }}</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="id_password_confirm" class="form-label">Confirm Password</label>
+                    {{ form.password_confirm }}
+                    <div class="text-danger">{{ form.password_confirm.errors }}</div>
+                </div>
+            </div>
+
+            <hr class="my-4">
+            <h5 class="text-muted mb-3">Student Details</h5>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="id_gender" class="form-label">Gender</label>
+                    {{ form.gender }}
+                    <div class="text-danger">{{ form.gender.errors }}</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="id_level" class="form-label">Course Level</label>
+                    {{ form.level }}
+                    <div class="text-danger">{{ form.level.errors }}</div>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="btn btn-success btn-lg">Create Account</button>
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary">Back to Welcome</a>
+            </div>
+        </form>
+        
+    </div>
+
+</body>
+</html>

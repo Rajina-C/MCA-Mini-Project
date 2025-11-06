@@ -1,0 +1,43 @@
+{% extends "admin/base_site.html" %}
+
+{% load static %}
+
+{% block branding %}
+<div id="site-branding">
+    <img src="{% static 'images/app-logo.png' %}" alt="Logo" class="admin-logo">
+    <h1 id="site-name">
+        <a href="{% url 'admin:index' %}">Hostel Allocation Admin</a>
+    </h1>
+</div>
+{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <style>
+    /* Change the header background color */
+    #header {
+        background-color: #5BC0DE; /* "Minty" theme teal */
+    }
+    
+    /* Change the header text color */
+    #header a:link, #header a:visited {
+        color: #FFFFFF; /* White */
+    }
+
+    /* --- New Styles for the Logo --- */
+    
+    /* Create a flex container for the logo and title */
+    #site-branding {
+        display: flex;
+        align-items: center;
+    }
+    
+    /* Style the logo */
+    .admin-logo {
+        height: 35px;  /* Adjust height as needed */
+        width: 35px;   /* Adjust width as needed */
+        margin-right: 10px;
+    }
+    
+  </style>
+{% endblock %}

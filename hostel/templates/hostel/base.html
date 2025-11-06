@@ -1,0 +1,63 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hostel Allocation</title>
+    <link href="https://bootswatch.com/5/minty/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-text {
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'dashboard' %}">
+                <img src="{% static 'images/app-logo.png' %}" alt="Hostel Logo" width="30" height="30" class="d-inline-block align-text-top">
+                Hostel Allocator
+            </a>
+            
+            <div class="collapse navbar-collapse">
+                <div class="navbar-nav ms-auto">
+                    
+                    {% if user.is_authenticated %}
+                        <span class="navbar-text text-white">
+                            Welcome, {{ user.username }}
+                        </span>
+                        
+                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                        <a class="nav-link" href="{% url 'hostel_category' %}">Hostels</a>
+                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                        
+                        <form action="{% url 'logout' %}" method="post" class="d-flex">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link nav-link">Logout</button>
+                        </form>
+                    
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

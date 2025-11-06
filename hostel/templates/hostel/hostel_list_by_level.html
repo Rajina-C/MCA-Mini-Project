@@ -1,0 +1,30 @@
+{% extends 'hostel/base.html' %}
+
+{% block content %}
+    <h1 class="mb-4">{{ gender_display }} Hostels - {{ level_display }}</h1>
+    <hr>
+
+    <div class="row">
+        {% for hostel in hostels %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if hostel.image %}
+                        <img src="{{ hostel.image.url }}" class="card-img-top" alt="{{ hostel.name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <img src="https://via.placeholder.com/300x200.png?text=No+Image" class="card-img-top" alt="No Image">
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column"> <h5 class="card-title">{{ hostel.name }}</h5>
+                        <p class="card-text">{{ hostel.get_level_display }}</p>
+                        <a href="{% url 'hostel_detail' hostel_id=hostel.id %}" class="btn btn-primary mt-auto">View Details</a> </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col">
+                <p class="alert alert-info">No {{ gender_display|lower }} hostels listed for {{ level_display }} at this time.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'hostel_list' gender=gender_code %}" class="btn btn-secondary mt-3">&larr; Back to Level Categories</a>
+{% endblock %}

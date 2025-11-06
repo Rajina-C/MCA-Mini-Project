@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assign Room</title>
+</head>
+<body>
+    <h1>Assign Room for {{ application.student.username }}</h1>
+    <p><strong>Status:</strong> {{ application.get_application_status_display }}</p>
+    <p><strong>Preference Note:</strong> {{ application.hostel_preference_note }}</p>
+    <hr>
+
+    <h2>Available Rooms</h2>
+    {% if available_rooms %}
+        <form method="post">
+            {% csrf_token %}
+            <select name="room_id" required>
+                <option value="" disabled selected>Select a room</option>
+                {% for room in available_rooms %}
+                    <option value="{{ room.id }}">{{ room }} (Occupants: {{ room.num_students }}/{{ room.capacity }})</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <button type="submit">Assign This Room</button>
+        </form>
+    {% else %}
+        <p>No available rooms match the criteria.</p>
+    {% endif %}
+
+    <br>
+    <a href="/admin/hostel/studentapplication/">Back to Applications List</a>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{% extends 'hostel/base.html' %}
+
+{% block content %}
+    <h1 class="mb-4">Hostel Categories</h1>
+    <p class="lead">Please select a category to view the available hostels.</p>
+    <hr>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Boys Hostels</h3>
+                    <p class="card-text">View all hostels designated for boys (UG & PG).</p>
+                    <a href="{% url 'hostel_list' gender='M' %}" class="btn btn-primary">View Boys Hostels</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Girls Hostels</h3>
+                    <p class="card-text">View all hostels designated for girls (UG & PG).</p>
+                    <a href="{% url 'hostel_list' gender='F' %}" class="btn btn-primary">View Girls Hostels</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

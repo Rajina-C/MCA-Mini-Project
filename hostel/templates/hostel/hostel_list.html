@@ -1,0 +1,33 @@
+{% extends 'hostel/base.html' %}
+{% load template_filters %} {# <-- MOVED THIS LINE TO THE TOP #}
+
+{% block content %}
+    <h1 class="mb-4">{{ gender_display }} Hostels</h1>
+    <p class="lead">Please select a course level category.</p>
+    <hr>
+
+    <div class="row">
+        {% for level_code, level_name in levels %}
+            {% with hostel_count=level_counts|get_item:level_code %} {# Get the count for this level #}
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ level_name }} <span class="badge bg-secondary">{{ hostel_count }} Hostel{{ hostel_count|pluralize }}</span></h3>
+                            <p class="card-text">View {{ gender_display }} hostels for {{ level_name }} students.</p>
+                            
+                            {% if hostel_count > 0 %}
+                                <a href="{% url 'hostel_list_by_level' gender=gender_code level=level_code %}" class="btn btn-primary">View {{ level_name }} Hostels</a>
+                            {% else %}
+                                <button class="btn btn-primary" disabled>View {{ level_name }} Hostels</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endwith %}
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'hostel_category' %}" class="btn btn-secondary mt-3">&larr; Back to Gender Categories</a>
+{% endblock %}
+
+{# Removed the extra_scripts block as it's not needed here #}

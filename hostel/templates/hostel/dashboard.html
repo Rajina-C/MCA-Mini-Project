@@ -1,0 +1,149 @@
+{% extends 'hostel/base.html' %}
+
+{% block content %}
+
+
+    {% if form %}
+        <h1 class="mb-4">Submit Your Application</h1>
+        <p class="lead">Welcome, {{ request.user.username }}! Please fill out the form below to complete your hostel application.</p>
+        
+        <form method="post" enctype="multipart/form-data"> {# enctype is crucial for file uploads #}
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="card mb-4">
+                <div class="card-header">Personal & Application Details</div>
+                <div class="card-body">
+                    
+                    <div class="mb-3">
+                        <label for="id_photo" class="form-label">Your Recent Photo</label>
+                        {{ form.photo }}
+                        <div class="text-danger">{{ form.photo.errors }}</div>
+                    </div>
+                    <hr>
+                    
+                    <div class="mb-3">
+                        <label for="id_address" class="form-label">Address</label>
+                        {{ form.address }}
+                        <div class="text-danger">{{ form.address.errors }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_guardian_contact" class="form-label">Guardian's Contact No.</label>
+                        {{ form.guardian_contact }}
+                        <div class="text-danger">{{ form.guardian_contact.errors }}</div>
+                    </div>
+                    
+                    <hr>
+                    <p class="text-muted small">Please upload your required documents below.</p>
+
+                    <div class="mb-3">
+                        <label for="id_provisional_letter" class="form-label">Provisional Admission Letter</label>
+                        {{ form.provisional_letter }}
+                        <div class="text-danger">{{ form.provisional_letter.errors }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_fee_receipt" class="form-label">Hostel Fee Payment Receipt</label>
+                        {{ form.fee_receipt }}
+                        <div class="text-danger">{{ form.fee_receipt.errors }}</div>
+                    </div>
+                    
+                    <hr>
+
+                    <div class="mb-3">
+                        <label for="id_hostel_preference_note" class="form-label">Preference Note (Optional)</label>
+                        {{ form.hostel_preference_note }}
+                        <div class="text-danger">{{ form.hostel_preference_note.errors }}</div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success btn-lg">Submit Application</button>
+        </form>
+
+    {% elif application %}
+        <h1 class="mb-4">Dashboard</h1>
+        
+        {# --- CHECK FOR REJECTION --- #}
+        {% if application.application_status == 'REJECTED' %}
+        
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h2>Your Application Status: Rejected</h2>
+                </div>
+                <div class="card-body">
+                    <p>Unfortunately, your application has been rejected.</p>
+                    
+                    {% if application.rejection_message %}
+                        <h5 class="mt-4">Reason for Rejection:</h5>
+                        <div class="alert alert-danger mb-0">
+                            {{ application.rejection_message|linebreaksbr }}
+                        </div>
+                    {% else %}
+                        <p class="mt-4"><i>No reason was provided. Please contact the hostel office for more information.</i></p>
+                    {% endif %}
+                    
+                    {# --- ADD RE-APPLY BUTTON --- #}
+                    <form action="{% url 'reapply_application' %}" method="POST" class="mt-4">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-warning">
+                            Re-Apply Now (Resets Application)
+                        </button>
+                    </form>
+                    {# --- END RE-APPLY BUTTON --- #}
+                </div>
+            </div>
+
+        {# --- ELSE, SHOW PENDING/APPROVED --- #}
+        {% else %} 
+        
+            <div class="card">
+                <div class="card-header">
+                    <h2>Your Application Status</h2>
+                </div>
+                <div class="card-body">
+                    
+                    {% if application.application_status == 'APPROVED' %}
+                        <p><strong>Your Application is kept Approved.</strong></p>
+                    {% else %}
+                        <p><strong>Your Application is kept Pending.</strong></p>
+                    {% endif %}
+
+                    <hr>
+                    <p><strong>Status:</strong> <span class="badge bg-primary fs-6">{{ application.get_application_status_display }}</span></p>
+                    
+                    {% if application.assigned_room %}
+                        <p><strong>Assigned Room:</strong> {{ application.assigned_room }}</p>
+
+                        {# --- DOWNLOAD BUTTON (Only shows if APPROVED and room is assigned) --- #}
+                        {% if application.application_status == 'APPROVED' %}
+                        <a href="{% url 'download_approval_slip' %}" class="btn btn-success mt-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download me-2" viewBox="0 0 16 16">
+                              <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                              <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                            </svg>
+                            Download Allotment Slip (PDF)
+                        </a>
+                        {% endif %}
+                        {# --- END DOWNLOAD BUTTON --- #}
+                        
+                    {% else %}
+                        <p><strong>Assigned Room:</strong> Not yet assigned.</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+        {% endif %} 
+        {# --- END OF REJECTION CHECK --- #}
+
+    {% else %}
+        <h1 class="mb-4">Dashboard</h1>
+        <div class="alert alert-danger">
+            Could not find your application details. Please contact support.
+        </div>
+    {% endif %}
+
+{% endblock %}

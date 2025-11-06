@@ -1,0 +1,78 @@
+{% extends 'hostel/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <!-- Image Column -->
+        <div class="col-md-6 mb-4">
+            {% if hostel.image %}
+                <img src="{{ hostel.image.url }}" class="img-fluid rounded shadow" alt="{{ hostel.name }}">
+            {% else %}
+                {# Display a placeholder if no image is uploaded #}
+                <img src="https://via.placeholder.com/600x400.png?text=Hostel+Image+Not+Available" class="img-fluid rounded shadow" alt="No Image">
+            {% endif %}
+        </div>
+
+        <!-- Details Column -->
+        <div class="col-md-6">
+            <h1>{{ hostel.name }}</h1>
+            <p class="lead text-muted">{{ hostel.get_gender_display }} | {{ hostel.get_level_display }}</p>
+
+            <!-- Description -->
+            {% if hostel.description %}
+                <p>{{ hostel.description|linebreaksbr }}</p>
+            {% else %}
+                <p><i>No description provided for this hostel.</i></p>
+            {% endif %}
+
+            <!-- Hostel Status & Location Card -->
+            <div class="card mt-4 mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Hostel Info & Location</h5> {# Renamed slightly #}
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Total Rooms:</strong> {{ total_rooms }}</li>
+                        <li class="list-group-item"><strong>Capacity per Room:</strong> {{ room_capacity }} Students</li>
+                        {# Available Rooms line removed #}
+                        {# Total Vacancies line removed #}
+                        {# Display Location Link/Text #}
+                        {% if hostel.location_details %}
+                            <li class="list-group-item">
+                                <strong>Location:</strong>
+                                {% if hostel.location_details|slice:":4" == 'http' %}
+                                    <a href="{{ hostel.location_details }}" target="_blank" rel="noopener noreferrer">View on Map <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg></a>
+                                {% else %}
+                                    {{ hostel.location_details }}
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Warden Details Card -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Warden Contact</h5>
+                    <ul class="list-group list-group-flush">
+                        {% if hostel.warden_name %}
+                            <li class="list-group-item"><strong>Name:</strong> {{ hostel.warden_name }}</li>
+                        {% endif %}
+                        {% if hostel.warden_phone %}
+                            <li class="list-group-item"><strong>Phone:</strong> {{ hostel.warden_phone }}</li>
+                        {% endif %}
+                        {% if hostel.warden_email %}
+                            <li class="list-group-item"><strong>Email:</strong> {{ hostel.warden_email }}</li>
+                        {% endif %}
+                        {% if not hostel.warden_name and not hostel.warden_phone and not hostel.warden_email %}
+                             <li class="list-group-item"><i>No warden contact information provided.</i></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <a href="{% url 'hostel_list' gender=hostel.gender %}" class="btn btn-secondary mt-4">&larr; Back to {{ hostel.get_gender_display }} Hostel Levels</a>
+
+{% endblock %}
+
