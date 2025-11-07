@@ -25,13 +25,13 @@ SECRET_KEY = 'django-insecure-ezl92l$tg$ekkh_mr7js)tux2ajwab6*mmukxvom4-pyg7sz)4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'hostel',   
+    'hostel',  
     'unfold', 
     'unfold.contrib.filters', 
     'unfold.contrib.forms',  
@@ -113,7 +113,7 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Kolkata'
 
-USE_I18N = True
+USE_I1N = True
 
 USE_TZ = True
 
@@ -142,3 +142,5 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = '/'
 
 # settings.py (at the bottom)
+# All JAZZMIN settings have been removed to resolve the merge conflict
+# and finalize the switch to django-unfold.
