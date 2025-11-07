@@ -51,49 +51,54 @@ class Hostel(models.Model):
     )
     # --- End Location Field ---
 
+    # --- THIS IS THE NEW FIELD ---
+    is_manually_closed = models.BooleanField(
+        default=False,
+        help_text="Check this box to manually close this hostel to new applications, even if it is not full."
+    )
+    # --- END OF NEW FIELD ---
+
     def __str__(self):
         return f"{self.name} ({self.get_gender_display()} {self.get_level_display()})"
 
-    # --- DEBUGGING Helper Method: Check if Hostel is Full ---
+    # --- UPDATED Helper Method: Check if Hostel is Full ---
     def is_full(self):
-        # print(f"\n--- Checking is_full for Hostel: {self.name} ---") # DEBUG START
+        
+        # --- THIS IS THE NEW LOGIC ---
+        # If the 'manually closed' box is checked, always report as 'full'.
+        if self.is_manually_closed:
+            return True
+        # --- END OF NEW LOGIC ---
+
+        # --- Your existing logic continues below ---
         rooms = self.room_set.all()
         if not rooms.exists():
-            # print(f"DEBUG: No rooms found. Returning True (Full).") # DEBUG
             return True
 
         try:
             first_room = rooms.first()
             if first_room is None or not hasattr(first_room, 'capacity'):
-                 # print(f"DEBUG: Could not get capacity from first room. Returning True (Full).") # DEBUG
-                 return True
+                return True
             room_capacity = int(first_room.capacity)
             if room_capacity <= 0:
-                 # print(f"DEBUG: Invalid room capacity ({room_capacity}). Returning True (Full).") # DEBUG
-                 return True
+                return True
         except (ValueError, TypeError) as e:
-             # print(f"DEBUG: Error getting room capacity: {e}. Returning True (Full).") # DEBUG
-             return True
+            return True
 
         total_rooms_count = rooms.count()
         total_capacity = total_rooms_count * room_capacity
-        # print(f"DEBUG: Found {total_rooms_count} rooms. Room Capacity = {room_capacity}. Total Capacity = {total_capacity}") # DEBUG
 
         if total_capacity == 0:
-             # print(f"DEBUG: Total capacity calculated as 0. Returning True (Full).") # DEBUG
-             return True
+            return True
 
         # Count students currently assigned to ANY room in this specific hostel
         current_occupants = StudentApplication.objects.filter(
             assigned_room__hostel=self
         ).count()
-        # print(f"DEBUG: Current Occupants = {current_occupants}") # DEBUG
-
+        
         is_currently_full = current_occupants >= total_capacity
-        # print(f"DEBUG: Comparison: {current_occupants} >= {total_capacity} is {is_currently_full}. Returning {is_currently_full}.") # DEBUG
-        # print(f"--- Finished is_full check for {self.name} ---\n") # DEBUG END
         return is_currently_full
-    # --- END OF DEBUGGING Helper Method ---
+    # --- END OF UPDATED Helper Method ---
 
 
 # 2. Define Room SECOND (it depends on Hostel)
@@ -148,4 +153,3 @@ class StudentApplication(models.Model):
 
     def __str__(self):
         return f"Application for {self.student.username}"
-

@@ -31,8 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'jazzmin',
     'hostel',   
+    'unfold', 
+    'unfold.contrib.filters', 
+    'unfold.contrib.forms',  
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -140,71 +142,3 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = '/'
 
 # settings.py (at the bottom)
-
-JAZZMIN_SETTINGS = {
-    # Title on the login screen (19 chars max) (defaults to current_admin_site.site_title if absent or None)
-    "site_title": "Hostel Admin",
-
-    # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_header": "Hostel Allocation",
-
-    # Logo to use for your site, must be present in static files
-    "site_logo": "images/logo.png", # Path relative to STATICFILES_DIRS or APP_DIRS static
-
-    # Welcome text on the login screen
-    "welcome_sign": "Welcome to the Hostel Allocation Admin Panel",
-
-    # Copyright on the footer
-    "copyright": "Pondicherry University Hostel Admin",
-
-    # UI Tweaks
-    "show_ui_builder": False, # Set True to allow easy theme changes in the UI (for development)
-
-    # Theme Customization
-    # Add 'flatly', 'cerulean', 'cosmo', 'journal', 'litera', 'lumen', 'lux', 'materia', 'minty', 'pulse', 'sandstone', 'simplex', 'sketchy', 'slate', 'solar', 'spacelab', 'superhero', 'united', 'yeti'
-    "theme": "minty", # Use the same theme as your frontend
-
-     # Theme options:
-    # https://bootswatch.com/
-    "bootswatch_theme": "minty",
-
-}
-
-# Jazzmin UI Tweaks (optional)
-JAZZMIN_UI_TWEAKS = {
-    "navbar_small_text": False,
-    "footer_small_text": True,
-    "body_small_text": False,
-    "brand_small_text": False,
-    "brand_colour": "navbar-primary", # Use theme's primary color for brand
-    "accent": "accent-primary",
-    "navbar": "navbar-dark", # Make navbar text light
-    "no_navbar_border": False,
-    "navbar_fixed": True,
-    "layout_boxed": False,
-    "footer_fixed": False,
-    "sidebar_fixed": True,
-    "sidebar": "sidebar-dark-primary", # Sidebar theme
-    "sidebar_nav_small_text": False,
-    "sidebar_disable_expand": False,
-    "sidebar_nav_child_indent": False,
-    "sidebar_nav_compact_style": False,
-    "sidebar_nav_legacy_style": False,
-    "sidebar_nav_flat_style": True, # Flatter look
-    "theme": "minty",
-    "dark_mode_theme": None,
-    "button_classes": {
-        "primary": "btn-primary",
-        "secondary": "btn-secondary",
-        "info": "btn-info",
-        "warning": "btn-warning",
-        "danger": "btn-danger",
-        "success": "btn-success"
-    },
-    "actions_sticky_top": True
-}
-ALLOWED_HOSTS = [
-    'miniproject.pythonanywhere.com', 
-    '127.0.0.1',
-    'localhost',
-]
